@@ -3,6 +3,7 @@ stages:
 
 build website:
     image: alpine/git:v2.36.1
-    stage: clone
+    stage: pull
     script:
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@192.168.110.134:root/marketplace
+        - git pull
+        - ls -l
