@@ -6,5 +6,5 @@ build website:
     stage: pull
     script:
         - ls -l /build
-        - ls -l /builds
+        - ls -l /builds/root
 
