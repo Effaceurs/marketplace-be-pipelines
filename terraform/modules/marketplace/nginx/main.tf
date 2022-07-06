@@ -7,5 +7,5 @@ terraform {
 }
 
 provider "kubernetes" {
-  config_path    = "../../../config"
+  config_path    = "/builds/root/marketplace/terraform/config"
 }
