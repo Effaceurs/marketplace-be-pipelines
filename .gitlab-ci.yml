@@ -20,5 +20,5 @@ build website2:
     stage: check
     script:
         - terraform --version
-        - terraform init /builds/root/marketplace/terraform/customers/customer1
-        - ls -l /builds/root/marketplace
+        - cd /builds/root/marketplace/terraform/customers/customer1
+        - terraform init 
