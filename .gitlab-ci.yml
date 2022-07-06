@@ -2,14 +2,22 @@ stages:
     - pull
     - check
 
-build website:
-    image: bitnami/git:2.37.0 
-    stage: pull
-    script:
-        - ls -l /builds/root/marketplace
+#build website:
+#    image: bitnami/git:2.37.0 
+#    stage: pull
+#    script:
+#        - ls -l /builds/root/marketplace
+#    artifacts:
+#        paths:
+#            - /builds/root/marketplace
 
 build website2:
-    image: hashicorp/terraform 
+    image: 
+      name: hashicorp/terraform 
+      entrypoint:
+      - /usr/bin/env
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     stage: check
     script:
         - terraform --version
+        - ls -l /builds/root/marketplace
