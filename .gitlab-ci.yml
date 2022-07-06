@@ -12,6 +12,7 @@ check1:
       - /usr/bin/env 
   script: 
     - touch 1
+    - pwd
   artifacts:
     paths: 
     - ./1
@@ -25,6 +26,7 @@ check2:
   script: 
     - ls -l /
     - ls -l .
+    - pwd
 
 
 #build:
