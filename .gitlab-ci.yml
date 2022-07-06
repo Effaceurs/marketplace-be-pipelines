@@ -5,6 +5,5 @@ build website:
     image: bitnami/git:2.37.0 
     stage: pull
     script:
-        - ls -l
-        - git pull
-        - ls -l
+        - ls -l /
+
