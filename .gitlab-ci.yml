@@ -31,11 +31,12 @@ check:
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
   script:
-    - ls -l 
-    - ls -l ./terraform/customers/customer1/
-    - mkdir -p ~/.ssh/
-    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
-    - git remote set-url origin git@192.168.110.134:root/marketplace.git
+    #- ls -l 
+    #- ls -l ./terraform/customers/customer1/
+    #- mkdir -p ~/.ssh/
+    #- echo $SSH_PUBLIC_KEY > ~/.ssh/id_rsa.pub
+    #- cat ~/.ssh/id_rsa.pub
+    - git remote set-url origin git:$ACCESS_TOKEN@192.168.110.134:root/marketplace.git
     - git add ./terraform/customers/customer1/*.tfstate
     - git commit --allow-empty -m "[terraform] commiting changes from $CI_PIPELINE_ID"
     - git push origin HEAD:main
