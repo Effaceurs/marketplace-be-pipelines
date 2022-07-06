@@ -16,7 +16,7 @@ build:
         - terraform apply -auto-approve 
     artifacts:
         paths:
-        - ./*.{tfstate}
+        - /builds/root/marketplace/terraform/customers/customer1/*.{tfstate}
 
 check:
   stage: check
@@ -26,6 +26,6 @@ check:
       - /usr/bin/env 
   script:
     - ls -l 
-    - ls -l /
-    - cat ./*.{tfstate}
+    - ls -l /builds/root/marketplace/terraform/customers/customer1/
+    - cat /builds/root/marketplace/terraform/customers/customer1/*.{tfstate}
 
