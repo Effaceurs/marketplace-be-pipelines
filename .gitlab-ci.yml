@@ -5,7 +5,7 @@ stages:
     - check2
 
 check1:
-  stage: check
+  stage: check1
   image:
     name: alpine/git:latest
     entrypoint:
@@ -17,7 +17,7 @@ check1:
     - ./1
 
 check2:
-  stage: check
+  stage: check2
   image:
     name: alpine/git:latest
     entrypoint:
