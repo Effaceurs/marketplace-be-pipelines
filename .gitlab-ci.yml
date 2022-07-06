@@ -1,37 +1,62 @@
 stages:
-    - run
-    - check
+#    - run
+#    - check
+    - check1
+    - check2
 
-build:
-    image: 
-      name: hashicorp/terraform 
-      entrypoint:
-      - /usr/bin/env
-      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-    stage: run
-    script:
-        - terraform --version
-        - cd /builds/root/marketplace/terraform/customers/customer1
-        - terraform init 
-        - terraform apply -auto-approve 
-    artifacts:
-        paths:
-        - /builds/root/marketplace/terraform/customers/customer1/*.tfstate
-
-check:
+check1:
   stage: check
   image:
     name: alpine/git:latest
     entrypoint:
       - /usr/bin/env 
-  before_script:
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-  script:
-    - mkdir -p ~/.ssh/
-    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
-    - git remote set-url origin git@192.168.110.134:root/marketplace.git
-    - git add /builds/root/marketplace/terraform/customers/customer1/*.tfstate
-    - git commit --allow-empty -m "[terraform] commiting changes from $CI_PIPELINE_ID"
-    - git push origin
+  script: 
+    - touch 1
+  artifacts:
+    paths: 
+    - ./1
 
+check2:
+  stage: check
+  image:
+    name: alpine/git:latest
+    entrypoint:
+      - /usr/bin/env 
+  script: 
+    - ls -l /
+    - ls -l .
+
+
+#build:
+#    image: 
+#      name: hashicorp/terraform 
+#      entrypoint:
+#      - /usr/bin/env
+#      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+#    stage: run
+#    script:
+#        - terraform --version
+#        - cd /builds/root/marketplace/terraform/customers/customer1
+#        - terraform init 
+#        - terraform apply -auto-approve 
+#    artifacts:
+#        paths:
+#        - /builds/root/marketplace/terraform/customers/customer1/*.tfstate
+#
+#check:
+#  stage: check
+#  image:
+#    name: alpine/git:latest
+#    entrypoint:
+#      - /usr/bin/env 
+#  before_script:
+#    - git config --global user.name "${GITLAB_USER_NAME}"
+#    - git config --global user.email "${GITLAB_USER_EMAIL}"
+#  script:
+#    - mkdir -p ~/.ssh/
+#    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+#    - git remote set-url origin git@192.168.110.134:root/marketplace.git
+#    - git add /builds/root/marketplace/terraform/customers/customer1/*.tfstate
+#    - git commit --allow-empty -m "[terraform] commiting changes from $CI_PIPELINE_ID"
+#    - git push origin HEAD:main
+#
