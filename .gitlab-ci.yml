@@ -12,5 +12,4 @@ build website2:
     image: hashicorp/terraform 
     stage: check
     script:
-        - ls -l /builds/root/marketplace
         - terraform --version
