@@ -1,24 +1,31 @@
 stages:
-    - pull
+    - run
     - check
 
-#build website:
-#    image: bitnami/git:2.37.0 
-#    stage: pull
-#    script:
-#        - ls -l /builds/root/marketplace
-#    artifacts:
-#        paths:
-#            - /builds/root/marketplace
-
-build website2:
+build:
     image: 
       name: hashicorp/terraform 
       entrypoint:
       - /usr/bin/env
       - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-    stage: check
+    stage: run
     script:
         - terraform --version
         - cd /builds/root/marketplace/terraform/customers/customer1
         - terraform init 
+        - terraform apply -auto-approve 
+    artifacts:
+        paths:
+        - ./*.{tfstate}
+
+check:
+  stage: check
+  image:
+    name: alpine/git:latest
+    entrypoint:
+      - /usr/bin/env 
+  script:
+    - ls -l 
+    - ls -l /
+    - cat ./*.{tfstate}
+
