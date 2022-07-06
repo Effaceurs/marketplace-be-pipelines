@@ -1,5 +1,5 @@
 stages:
-    - clone
+    - pull
 
 build website:
     image: bitnami/git:2.37.0 
