@@ -41,5 +41,5 @@ check:
     - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
     - git add ./terraform/customers/customer1/*.tfstate
     - git commit --allow-empty -m "[terraform] commiting changes from $CI_PIPELINE_ID"
-    - git push origin HEAD:main
+    - git push origin HEAD:main -o ci.skip
 
