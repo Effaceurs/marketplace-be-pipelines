@@ -36,6 +36,6 @@ check:
   script:
     - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
     - git add ./terraform/customers/customer1/*.tfstate
-    - git commit --allow-empty -m "$(terraform output)"
+    - git commit --allow-empty -m "$BUILD_VARIABLE"
     - git push origin HEAD:main -o ci.skip
 
