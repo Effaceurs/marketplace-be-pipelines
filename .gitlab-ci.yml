@@ -17,9 +17,12 @@ build:
         - cd ./terraform/customers/customer1
         - terraform init 
         - terraform apply -auto-approve 
+        - echo "BUILD_VARIABLE=$(terraform output)" >> build.env
     artifacts:
         paths:
         - ./terraform/customers/customer1/*.tfstate
+        reports:
+            dotenv: build.env
 
 check:
   stage: check
