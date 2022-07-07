@@ -20,7 +20,6 @@ build:
     artifacts:
         paths:
         - ./terraform/customers/customer1/*.tfstate
-        - ./terraform/customers/customer1/service_node_port
 
 check:
   stage: check
@@ -34,6 +33,6 @@ check:
   script:
     - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
     - git add ./terraform/customers/customer1/*.tfstate
-    - git commit --allow-empty -m "NodePort:$(cat ./terraform/customers/customer1/service_node_port)"
+    - git commit --allow-empty -m "$(terraform output)"
     - git push origin HEAD:main -o ci.skip
 
