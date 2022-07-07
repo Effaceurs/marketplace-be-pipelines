@@ -2,10 +2,6 @@ stages:
     - run
     - check
 
-
-
-
-
 build:
     image: 
       name: hashicorp/terraform 
