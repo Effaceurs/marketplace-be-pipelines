@@ -17,12 +17,12 @@ build:
         - cd ./terraform/customers/customer1
         - terraform init 
         - terraform apply -auto-approve 
-        - echo "OUTPUT=$(terraform output | tr -d '\n')" >> build.env
+        - echo "OUTPUT=$(terraform output | tr -d '\n')" >> ./build.env
     artifacts:
         paths:
         - ./terraform/customers/customer1/*.tfstate
         reports:
-            dotenv: build.env
+            dotenv: ./build.env
 
 check:
   stage: check
