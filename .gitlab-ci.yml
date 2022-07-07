@@ -17,7 +17,7 @@ build:
         - cd ./terraform/customers/customer1
         - terraform init 
         - terraform apply -auto-approve 
-        - echo "BUILD_VARIABLE=$(terraform output)" >> build.env
+        - echo "OUTPUT=$(terraform output | tr -d '\n')" >> build.env
     artifacts:
         paths:
         - ./terraform/customers/customer1/*.tfstate
@@ -36,6 +36,6 @@ check:
   script:
     - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
     - git add ./terraform/customers/customer1/*.tfstate
-    - git commit --allow-empty -m "$BUILD_VARIABLE"
+    - git commit --allow-empty -m "$OUTPUT"
     - git push origin HEAD:main -o ci.skip
 
