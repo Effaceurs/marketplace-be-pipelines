@@ -22,7 +22,7 @@ preflight:
         - cat ./terraform/cusomers/${CUSTOMERNAME}/${MODULE_NAME}.tf
     artifacts:
         paths:
-        - ./terraform/
+        - ./*
 
 build:
     image: 
