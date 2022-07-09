@@ -24,42 +24,41 @@ preflight:
         paths:
         - ./terraform/
 
-#build:
-#    image: 
-#      name: hashicorp/terraform 
-#      entrypoint:
-#      - /usr/bin/env
-#      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-#    stage: build
-#    variables:
-#        MODULE_NAME: nginx
-#        NAMESPACE: mysupernamespace
-#        CUSTOMERNAME: customer2
-#    script:
-#        - cd ./terraform/customers/${CUSTOMERNAME}
-#        - terraform init 
-#        - terraform apply -auto-approve 
-#    artifacts:
-#        paths:
-#        - ./terraform/customers/customer1/*.tfstate
-#
-#push:
-#  stage: push
-#  variables:
-#    MODULE_NAME: nginx
-#    NAMESPACE: mysupernamespace
-#    CUSTOMERNAME: customer2
-#  image:
-#    name: alpine/git:latest
-#    entrypoint:
-#      - /usr/bin/env 
-#  before_script:
-#    - git config --global user.name "${GITLAB_USER_NAME}"
-#    - git config --global user.email "${GITLAB_USER_EMAIL}"
-#  script:
-#    - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-#    - git add ./terraform/customers/customer1/*.tfstate
-#    - git commit --allow-empty -m "$customer2 - $NAMESPACE - ${MODULE_NAME}"
-#    - git push origin HEAD:main -o ci.skip
-#
-#
+build:
+    image: 
+      name: hashicorp/terraform 
+      entrypoint:
+      - /usr/bin/env
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    stage: build
+    variables:
+        MODULE_NAME: nginx
+        NAMESPACE: mysupernamespace
+        CUSTOMERNAME: customer2
+    script:
+        - cd ./terraform/customers/${CUSTOMERNAME}
+        - terraform init 
+        - terraform apply -auto-approve 
+    artifacts:
+        paths:
+        - ./terraform/customers/customer1/*.tfstate
+
+push:
+  stage: push
+  variables:
+    MODULE_NAME: nginx
+    NAMESPACE: mysupernamespace
+    CUSTOMERNAME: customer2
+  image:
+    name: alpine/git:latest
+    entrypoint:
+      - /usr/bin/env 
+  before_script:
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
+  script:
+    - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
+    - git add ./terraform/customers/customer1/*.tfstate
+    - git commit --allow-empty -m "$customer2 - $NAMESPACE - ${MODULE_NAME}"
+    - git push origin HEAD:main -o ci.skip
+
