@@ -18,8 +18,8 @@ preflight:
         - mkdir -p ./terraform/cusomers/${CUSTOMERNAME}
         - cp -r ./terraform/templates/template.tf ./terraform/cusomers/${CUSTOMERNAME}/
         - envsubst < ./terraform/cusomers/${CUSTOMERNAME}/template.tf > ./terraform/cusomers/${CUSTOMERNAME}/${MODULE_NAME}.tf
-        - rm ./terraform/cusomers/${CUSTOMERNAME}/template.tf
-        - cat ./terraform/cusomers/${CUSTOMERNAME}/${MODULE_NAME}.tf
+        - rm ./terraform/customers/${CUSTOMERNAME}/template.tf
+        - cat ./terraform/customers/${CUSTOMERNAME}/${MODULE_NAME}.tf
     artifacts:
         paths:
         - ./*
@@ -36,8 +36,6 @@ build:
         NAMESPACE: mysupernamespace
         CUSTOMERNAME: customer2
     script:
-        - ls -ltr
-        - ls -ltr ./terraform
         - cd ./terraform/customers/${CUSTOMERNAME}
         - terraform init 
         - terraform apply -auto-approve 
