@@ -1,38 +1,64 @@
 stages:
-    - run
-    - check
+    - preflight
+    - build
+    - push
 
-build:
+preflight:
     image: 
-      name: hashicorp/terraform 
+      name: alpine:3.14
       entrypoint:
-      - /usr/bin/env
-      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-    stage: run
+        - /usr/bin/env 
+    stage: preflight
+    variables:
+        MODULE_NAME: nginx
+        NAMESPACE: mysupernamespace
+        CUSTOMERNAME: customer2
     script:
-        - cd ./terraform/customers/customer1
-        - terraform init 
-        - terraform apply -auto-approve 
-        - echo "OUTPUT=$(terraform output | tr '\n' ';')" >> build.env
+        - mkdir -r ./terraform/cusomers/$CUSTOMERNAME
+        - cp -r ./terraform/templates/template.tf ./terraform/cusomers/$CUSTOMERNAME/
+        - envsubst < ./terraform/cusomers/$CUSTOMERNAME/template.tf > ./terraform/cusomers/$CUSTOMERNAME/$MODULE_NAME.tf
+        - rm ./terraform/cusomers/$CUSTOMERNAME/template.tf
+        - cat /terraform/cusomers/$CUSTOMERNAME/$MODULE_NAME.tf
     artifacts:
         paths:
-        - ./terraform/customers/customer1/*.tfstate
-        reports:
-            dotenv: ./terraform/customers/customer1/build.env
+        - ./terraform/
 
-check:
-  stage: check
-  image:
-    name: alpine/git:latest
-    entrypoint:
-      - /usr/bin/env 
-  before_script:
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-  script:
-    - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-    - git add ./terraform/customers/customer1/*.tfstate
-    - git commit --allow-empty -m "CHO_TAKOE"
-    - echo "$OUTPUT"
-    - git push origin HEAD:main -o ci.skip
-
+#build:
+#    image: 
+#      name: hashicorp/terraform 
+#      entrypoint:
+#      - /usr/bin/env
+#      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+#    stage: build
+#    variables:
+#        MODULE_NAME: nginx
+#        NAMESPACE: mysupernamespace
+#        CUSTOMERNAME: customer2
+#    script:
+#        - cd ./terraform/customers/$CUSTOMERNAME
+#        - terraform init 
+#        - terraform apply -auto-approve 
+#    artifacts:
+#        paths:
+#        - ./terraform/customers/customer1/*.tfstate
+#
+#push:
+#  stage: push
+#  variables:
+#    MODULE_NAME: nginx
+#    NAMESPACE: mysupernamespace
+#    CUSTOMERNAME: customer2
+#  image:
+#    name: alpine/git:latest
+#    entrypoint:
+#      - /usr/bin/env 
+#  before_script:
+#    - git config --global user.name "${GITLAB_USER_NAME}"
+#    - git config --global user.email "${GITLAB_USER_EMAIL}"
+#  script:
+#    - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
+#    - git add ./terraform/customers/customer1/*.tfstate
+#    - git commit --allow-empty -m "$customer2 - $NAMESPACE - $MODULE_NAME"
+#    - git push origin HEAD:main -o ci.skip
+#
+#
