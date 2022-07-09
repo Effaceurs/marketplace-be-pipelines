@@ -14,7 +14,7 @@ preflight:
         NAMESPACE: mysupernamespace
         CUSTOMERNAME: customer2
     script:
-        - mkdir -r ./terraform/cusomers/$CUSTOMERNAME
+        - mkdir -p ./terraform/cusomers/$CUSTOMERNAME
         - cp -r ./terraform/templates/template.tf ./terraform/cusomers/$CUSTOMERNAME/
         - envsubst < ./terraform/cusomers/$CUSTOMERNAME/template.tf > ./terraform/cusomers/$CUSTOMERNAME/$MODULE_NAME.tf
         - rm ./terraform/cusomers/$CUSTOMERNAME/template.tf
