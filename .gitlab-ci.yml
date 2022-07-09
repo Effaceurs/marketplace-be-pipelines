@@ -39,29 +39,33 @@ build:
         - cd ./terraform/customers/${CUSTOMERNAME}
         - terraform init 
         - terraform apply -auto-approve 
+        - ls - ltr ./terraform/customers/${CUSTOMERNAME}
+        - ls - ltr ./
+        - ls - ltr ./terraform/
+        - cat ./terraform/customers/${CUSTOMERNAME}/output.txt
     artifacts:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/output.txt
         - ./terraform/customers/${CUSTOMERNAME}/*.tfstate
 
 push:
-  stage: push
-  variables:
-    MODULE_NAME: nginx
-    NAMESPACE: mysupernamespace
-    CUSTOMERNAME: customer2
-  image:
-    name: alpine/git:latest
-    entrypoint:
-      - /usr/bin/env 
-  before_script:
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-  script:
-    - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-    - git add ./terraform/customers/${CUSTOMERNAME}/*.tfstate
-    - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${CI_PIPELINE_ID}"
-    - git push origin HEAD:main -o ci.skip
-  artifacts:
-    paths:
-    - ./terraform/customers/${CUSTOMERNAME}/output.txt
+    stage: push
+    variables:
+      MODULE_NAME: nginx
+      NAMESPACE: mysupernamespace
+      CUSTOMERNAME: customer2
+    image:
+      name: alpine/git:latest
+      entrypoint:
+        - /usr/bin/env 
+    before_script:
+      - git config --global user.name "${GITLAB_USER_NAME}"
+      - git config --global user.email "${GITLAB_USER_EMAIL}"
+    script:
+      - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
+      - git add ./terraform/customers/${CUSTOMERNAME}/*.tfstate
+      - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${CI_PIPELINE_ID}"
+      - git push origin HEAD:main -o ci.skip
+    artifacts:
+      paths:
+      - ./terraform/customers/${CUSTOMERNAME}/output.txt
