@@ -39,14 +39,11 @@ build:
         - cd ./terraform/customers/${CUSTOMERNAME}
         - terraform init 
         - terraform apply -auto-approve 
-        - ls - ltr ./terraform/customers/${CUSTOMERNAME}
-        - ls - ltr ./
-        - ls - ltr ./terraform/
-        - cat ./terraform/customers/${CUSTOMERNAME}/output.txt
+        - ls -ltr ./
+        - cat ./output.txt
     artifacts:
         paths:
-        - ./terraform/customers/${CUSTOMERNAME}/output.txt
-        - ./terraform/customers/${CUSTOMERNAME}/*.tfstate
+        - ./*
 
 push:
     stage: push
