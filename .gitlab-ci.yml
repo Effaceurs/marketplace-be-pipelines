@@ -18,9 +18,8 @@ preflight:
         - mkdir -p ./terraform/cusomers/${CUSTOMERNAME}
         - cp -r ./terraform/templates/template.tf ./terraform/cusomers/${CUSTOMERNAME}/
         - envsubst < ./terraform/cusomers/${CUSTOMERNAME}/template.tf > ./terraform/cusomers/${CUSTOMERNAME}/${MODULE_NAME}.tf
-        - ls -ltr ./terraform/cusomers/${CUSTOMERNAME}/
         - rm ./terraform/cusomers/${CUSTOMERNAME}/template.tf
-        - cat /terraform/cusomers/${CUSTOMERNAME}/${MODULE_NAME}.tf
+        - cat ./terraform/cusomers/${CUSTOMERNAME}/${MODULE_NAME}.tf
     artifacts:
         paths:
         - ./terraform/
