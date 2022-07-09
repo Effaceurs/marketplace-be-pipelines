@@ -36,6 +36,8 @@ build:
         NAMESPACE: mysupernamespace
         CUSTOMERNAME: customer2
     script:
+        - ls -ltr
+        - ls -ltr ./terraform
         - cd ./terraform/customers/${CUSTOMERNAME}
         - terraform init 
         - terraform apply -auto-approve 
