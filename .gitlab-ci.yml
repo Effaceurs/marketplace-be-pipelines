@@ -10,14 +10,11 @@ preflight:
     stage: preflight
     script:
         - apk update && apk add gettext
-        - mkdir -p ./terraform/customers/${CUSTOMERNAME}
-        - cp -r ./terraform/templates/template.tf ./terraform/customers/${CUSTOMERNAME}/
-        - envsubst < ./terraform/customers/${CUSTOMERNAME}/template.tf > ./terraform/customers/${CUSTOMERNAME}/${MODULE_NAME}.tf
-        - rm ./terraform/customers/${CUSTOMERNAME}/template.tf
-        - cat ./terraform/customers/${CUSTOMERNAME}/${MODULE_NAME}.tf
+        - mkdir -p ./terraform/customers/${CUSTOMERNAME}/${ID}
+        - envsubst < ./terraform/templates/${MODULE_NAME}.tf > ./terraform/customers/${CUSTOMERNAME}/${ID}/${MODULE_NAME}.tf
     artifacts:
         paths:
-        - ./*
+        - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
 
 build:
     image: 
@@ -27,14 +24,12 @@ build:
       - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     stage: build
     script:
-        - cd ./terraform/customers/${CUSTOMERNAME}
+        - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
         - terraform apply -auto-approve 
-        - ls -ltr ./
-        - cat ./output.txt
     artifacts:
         paths:
-        - ./*
+        - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
 
 push:
     stage: push
@@ -51,8 +46,8 @@ push:
       - git config --global user.email "${GITLAB_USER_EMAIL}"
     script:
       - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-      - git add ./terraform/customers/${CUSTOMERNAME}/*.tf*
-      - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${CI_PIPELINE_ID}"
+      - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
+      - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${ID}-${CI_PIPELINE_ID}"
       - git push origin HEAD:main -o ci.skip
     after_script:
     - mv ./terraform/customers/${CUSTOMERNAME}/output.txt ./output.txt 

@@ -1,9 +1,9 @@
 resource "kubernetes_deployment" "nginx" {
   metadata {
-    name = random_string.name.result
+    name = var.id
     namespace = var.namespace
     labels = {
-      App = random_string.name.result
+      App = var.id
     }
   }
 
@@ -11,19 +11,19 @@ resource "kubernetes_deployment" "nginx" {
     replicas = var.replicas
     selector {
       match_labels = {
-        App = random_string.name.result
+        App = var.id
       }
     }
     template {
       metadata {
         labels = {
-          App = random_string.name.result
+          App = var.id
         }
       }
       spec {
         container {
           image = "nginx:1.7.8"
-          name = random_string.name.result
+          name = var.id
           port {
             container_port = 80
           }
@@ -46,7 +46,7 @@ resource "kubernetes_deployment" "nginx" {
 
 resource "kubernetes_service" "nginx" {
   metadata {
-    name = random_string.name.result
+    name = var.id
     namespace = var.namespace
   }
   spec {

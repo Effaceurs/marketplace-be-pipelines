@@ -8,11 +8,7 @@ variable "replicas" {
   default = 1
 }
 
-resource "random_string" "name" {
-  length           = 16
-  lower            = true
-  upper            = false
-  special          = false
-  numeric          = false
+variable "id" {
+  type = string
 }
 
