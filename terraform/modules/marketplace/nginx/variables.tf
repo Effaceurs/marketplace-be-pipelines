@@ -3,6 +3,11 @@ variable "namespace" {
   default = "default"
 }
 
+variable "replicas" {
+  type = number
+  default = 1
+}
+
 resource "random_string" "name" {
   length           = 16
   lower            = true
@@ -10,3 +15,4 @@ resource "random_string" "name" {
   special          = false
   numeric          = false
 }
+

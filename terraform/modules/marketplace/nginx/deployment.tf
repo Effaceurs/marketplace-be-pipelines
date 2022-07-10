@@ -8,7 +8,7 @@ resource "kubernetes_deployment" "nginx" {
   }
 
   spec {
-    replicas = 1
+    replicas = var.replicas
     selector {
       match_labels = {
         App = random_string.name.result
@@ -24,7 +24,6 @@ resource "kubernetes_deployment" "nginx" {
         container {
           image = "nginx:1.7.8"
           name = random_string.name.result
-
           port {
             container_port = 80
           }

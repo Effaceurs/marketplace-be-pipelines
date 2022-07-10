@@ -2,7 +2,6 @@ stages:
     - preflight
     - build
     - push
-
 preflight:
     image: 
       name: alpine:3.14
@@ -52,7 +51,7 @@ push:
       - git config --global user.email "${GITLAB_USER_EMAIL}"
     script:
       - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-      - git add ./terraform/customers/${CUSTOMERNAME}/*.tfstate
+      - git add ./terraform/customers/${CUSTOMERNAME}/*.tf*
       - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${CI_PIPELINE_ID}"
       - git push origin HEAD:main -o ci.skip
     after_script:
