@@ -50,7 +50,7 @@ push:
       - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${ID}-${CI_PIPELINE_ID}"
       - git push origin HEAD:main -o ci.skip
     after_script:
-    - mv ./terraform/customers/${CUSTOMERNAME}/output.txt ./output.txt 
+    - mv ./terraform/customers/${ID}/${CUSTOMERNAME}/output.txt ./output.txt 
     artifacts:
       paths:
       - ./output.txt 
