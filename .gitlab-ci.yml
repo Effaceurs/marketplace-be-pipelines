@@ -12,6 +12,7 @@ checkProviders:
         PROVIDER : k8ss
     rules: 
         - if: $PROVIDER == "k8s"
+          allow_failure: true
     before_script:
       - mkdir ~/.kube/
       - echo ${KUBE_CONFIG} | base64 -d > ~/.kube/config
