@@ -1,0 +1,7 @@
+module "nginx" {
+  source = "../../../modules/marketplace/nginx"
+  namespace = "sashatest-ru"
+  replicas = "1"
+  id = "nginx62cc99d2e51d935c87be9f2d"
+}
+
