@@ -1,12 +1,12 @@
 stages:
-    - checkkProviderk8s
+    - checkProviderk8s
     - preflight
     - build
     - push
 
-checkkProviderk8s:
+checkProviderk8s:
     image: alpine/k8s:1.22.10
-    stage: checkProviders
+    stage: checkProviderk8s
     rules: 
         - if: $PROVIDER == "k8s"
           allow_failure: true
