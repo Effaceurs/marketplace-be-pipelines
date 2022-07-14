@@ -12,3 +12,6 @@ variable "id" {
   type = string
 }
 
+variable "version" {
+  type = string
+}
