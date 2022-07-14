@@ -12,6 +12,6 @@ variable "id" {
   type = string
 }
 
-variable "version" {
+variable "appVersion" {
   type = string
 }
