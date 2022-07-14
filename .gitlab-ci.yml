@@ -1,14 +1,15 @@
 stages:
     - checkProviders
-    - preflight
-    - build
-    - push
+#    - preflight
+#    - build
+#    - push
 
 checkProviders:
     image: alpine/k8s:1.22.10
     stage: checkProviders
     variables:
         NAMESPACE: test
+        PROVIDER : k8s
     rules: 
         - if: $PROVIDER == "k8s"
     before_script:
