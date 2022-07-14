@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "nginx" {
+resource "kubernetes_deployment" "httpd" {
   metadata {
     name = var.id
     namespace = var.namespace
@@ -22,7 +22,7 @@ resource "kubernetes_deployment" "nginx" {
       }
       spec {
         container {
-          image = "nginx:${var.appVersion}"
+          image = "httpd:${var.appVersion}"
           name = var.id
           port {
             container_port = 80
@@ -44,14 +44,14 @@ resource "kubernetes_deployment" "nginx" {
   }
 }
 
-resource "kubernetes_service" "nginx" {
+resource "kubernetes_service" "httpd" {
   metadata {
     name = var.id
     namespace = var.namespace
   }
   spec {
     selector = {
-      App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
+      App = kubernetes_deployment.httpd.spec.0.template.0.metadata[0].labels.App
     }
     port {
       port        = 80
