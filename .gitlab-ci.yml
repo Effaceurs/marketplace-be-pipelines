@@ -9,7 +9,7 @@ checkProviders:
     stage: checkProviders
     variables:
         NAMESPACE: test
-        PROVIDER : k8s
+        PROVIDER : k8ss
     rules: 
         - if: $PROVIDER == "k8s"
     before_script:
