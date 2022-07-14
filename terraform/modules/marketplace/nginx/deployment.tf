@@ -22,7 +22,7 @@ resource "kubernetes_deployment" "nginx" {
       }
       spec {
         container {
-          image = "nginx:+${var.version}"
+          image = "nginx:+${var.appVersion}"
           name = var.id
           port {
             container_port = 80
