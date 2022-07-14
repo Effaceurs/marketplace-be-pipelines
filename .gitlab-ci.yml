@@ -5,7 +5,9 @@ stages:
     - push
 
 checkProviderk8s:
-    image: alpine/k8s:1.22.10
+    image: 
+        name: alpine/k8s:1.22.10
+        pull_policy: if-not-present
     stage: checkProviderk8s
     rules: 
         - if: $PROVIDER == "k8s"
@@ -19,6 +21,7 @@ checkProviderk8s:
 preflight:
     image: 
       name: alpine:3.14
+      pull_policy: if-not-present
       entrypoint:
         - /usr/bin/env 
     stage: preflight
@@ -33,6 +36,7 @@ preflight:
 build:
     image: 
       name: hashicorp/terraform 
+      pull_policy: if-not-present
       entrypoint:
       - /usr/bin/env
       - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
@@ -49,6 +53,7 @@ push:
     stage: push
     image:
       name: alpine/git:latest
+      pull_policy: if-not-present
       entrypoint:
         - /usr/bin/env 
     before_script:
