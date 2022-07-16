@@ -56,10 +56,13 @@ push:
       - git config --global user.name "${GITLAB_USER_NAME}"
       - git config --global user.email "${GITLAB_USER_EMAIL}"
     script:
+      - ls -ltr ./
       - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
+      - git checkout -b customer/${CUSTOMERNAME}
+      - git pull
       - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
       - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${ID}-${CI_PIPELINE_ID}"
-      - git push origin HEAD:main -o ci.skip
+      - git push --set-upstream origin customer/${CUSTOMERNAME} -o ci.skip
     after_script:
     - mv ./terraform/customers/${CUSTOMERNAME}/${ID}/output.txt ./output.txt 
     artifacts:
