@@ -61,7 +61,7 @@ push:
       - git checkout -b customer/${CUSTOMERNAME} || git checkout customer/${CUSTOMERNAME} 
       - git pull --set-upstream origin customer/${CUSTOMERNAME} || echo 'nothing to pull'
       - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
-      - gir rm ./.gitlab-ci.yml || echo 'nothing to delete'
+      - git rm ./.gitlab-ci.yml || echo 'nothing to delete'
       - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${ID}-${CI_PIPELINE_ID}"
       - git push --set-upstream origin customer/${CUSTOMERNAME} -o ci.skip
     after_script:
