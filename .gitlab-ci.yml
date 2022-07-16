@@ -59,7 +59,7 @@ push:
       - ls -ltr ./
       - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
       - git checkout -b customer/${CUSTOMERNAME} || git checkout customer/${CUSTOMERNAME} 
-      - git pull --set-upstream origin customer/${CUSTOMERNAME}
+      - git pull --set-upstream origin customer/${CUSTOMERNAME} || echo 'nothing to pull'
       - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
       - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${ID}-${CI_PIPELINE_ID}"
       - git push --set-upstream origin customer/${CUSTOMERNAME} -o ci.skip
