@@ -62,8 +62,9 @@ push:
       - git pull --set-upstream origin customer/${CUSTOMERNAME} || echo 'nothing to pull'
       - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
       - git rm ./.gitlab-ci.yml || echo 'nothing to delete'
-      - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${ID}-${CI_PIPELINE_ID}"
+      - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
       - git push -f --set-upstream origin HEAD:customer/${CUSTOMERNAME} -o ci.skip
+    retry: 2
     after_script:
     - mv ./terraform/customers/${CUSTOMERNAME}/${ID}/output.txt ./output.txt 
     artifacts:
