@@ -25,7 +25,6 @@ resource "kubernetes_deployment" "wordpress_mysql" {
           name = "mysql${var.id}"
           port {
             container_port = 3306
-            name = "mysql${var.id}"
           }
           env {
             name = "MYSQL_ROOT_PASSWORD"
@@ -69,7 +68,6 @@ resource "kubernetes_deployment" "wordpress" {
           name = "wp${var.id}"
           port {
             container_port = 80
-            name = "wp${var.id}"
           }
           env {
             name = "WORDPRESS_DB_PASSWORD"
