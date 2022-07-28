@@ -4,6 +4,7 @@ resource "kubernetes_deployment" "httpd" {
     namespace = var.namespace
     labels = {
       app = var.id
+      version = var.appVersion
     }
   }
 

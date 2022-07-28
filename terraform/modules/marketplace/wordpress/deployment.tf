@@ -4,6 +4,7 @@ resource "kubernetes_deployment" "wordpress_mysql" {
     namespace = var.namespace
     labels = {
       app = "mysql${var.id}"
+      version = var.appVersion
     }
   }
   spec {
@@ -47,6 +48,7 @@ resource "kubernetes_deployment" "wordpress" {
     namespace = var.namespace
     labels = {
       app = "wp${var.id}"
+      version = var.appVersion
     }
   }
   spec {

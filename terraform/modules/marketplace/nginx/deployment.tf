@@ -4,6 +4,7 @@ resource "kubernetes_deployment" "nginx" {
     namespace = var.namespace
     labels = {
       app = var.id
+      version = var.appVersion
     }
   }
 
