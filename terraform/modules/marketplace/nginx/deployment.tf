@@ -19,6 +19,7 @@ resource "kubernetes_deployment" "nginx" {
       metadata {
         labels = {
           app = var.id
+          version = var.appVersion        
         }
       }
       spec {

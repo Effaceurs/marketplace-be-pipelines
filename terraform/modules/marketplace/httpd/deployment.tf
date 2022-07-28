@@ -19,6 +19,7 @@ resource "kubernetes_deployment" "httpd" {
       metadata {
         labels = {
           app = var.id
+          version = var.appVersion        
         }
       }
       spec {
