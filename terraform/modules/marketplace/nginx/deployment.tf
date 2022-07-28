@@ -3,7 +3,7 @@ resource "kubernetes_deployment" "nginx" {
     name = var.id
     namespace = var.namespace
     labels = {
-      App = var.id
+      app = var.id
     }
   }
 
@@ -11,13 +11,13 @@ resource "kubernetes_deployment" "nginx" {
     replicas = var.replicas
     selector {
       match_labels = {
-        App = var.id
+        app = var.id
       }
     }
     template {
       metadata {
         labels = {
-          App = var.id
+          app = var.id
         }
       }
       spec {
@@ -51,7 +51,7 @@ resource "kubernetes_service" "nginx" {
   }
   spec {
     selector = {
-      App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
+      app = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.app
     }
     port {
       port        = 80
