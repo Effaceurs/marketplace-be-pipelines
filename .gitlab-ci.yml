@@ -39,7 +39,9 @@ delete:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
         - terraform destroy -auto-approve 
-        - ls -l ./terraform/customers/ 
+        - ls -l /
+        - ls -l ./
+        - ls -l ~
         - rm -rf ./terraform/customers/${CUSTOMERNAME}/${ID}
         - git rm -r ./terraform/customers/${CUSTOMERNAME}/${ID} || git rm -r ./terraform/customers/${CUSTOMERNAME}/${ID}/ || git rm -r ./terraform/customers/${CUSTOMERNAME}/*
         - git commit --allow-empty -m "DELETEION OF ${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
