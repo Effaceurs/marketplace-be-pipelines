@@ -1,13 +1,14 @@
 stages:
-    - checkProviderk8s
+    - checkProviderKubernetes
     - preflight
     - build
     - push
+    - delete
 
 checkProviderk8s:
     image: 
         name: alpine/k8s:1.22.10
-    stage: checkProviderk8s
+    stage: checkProviderKubernetes
     rules: 
         - if: $PROVIDER == "k8s"
           allow_failure: true
@@ -17,7 +18,33 @@ checkProviderk8s:
     script:
         kubectl create namespace ${NAMESPACE} && kubectl label namespace ${NAMESPACE} istio-injection=enabled
 
+delete:
+    image: 
+      name: hashicorp/terraform 
+      entrypoint:
+      - /usr/bin/env
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    stage: delete
+    variables:
+      GIT_STRATEGY: clone
+    rules: 
+      - if: $STATUS == "deleting"
+    before_script:
+      - git config --global user.name "${GITLAB_USER_NAME}"
+      - git config --global user.email "${GITLAB_USER_EMAIL}"
+    script:
+        - git checkout customer/${CUSTOMERNAME} 
+        - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
+        - terraform destroy -auto-approve 
+        - git rm ./terraform/customers/${CUSTOMERNAME}/${ID}
+        - git commit --allow-empty -m "DELETEION OF ${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
+        - git push -f --set-upstream origin HEAD:customer/${CUSTOMERNAME} -o ci.skip
+
+
+
 preflight:
+    rules: 
+        - if: $STATUS != "deleting"
     image: 
       name: alpine:3.14
       entrypoint:
@@ -38,6 +65,8 @@ build:
       - /usr/bin/env
       - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     stage: build
+    rules: 
+    - if: $STATUS != "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
@@ -48,6 +77,8 @@ build:
 
 push:
     stage: push
+    rules: 
+    - if: $STATUS != "deleting"
     image:
       name: alpine/git:latest
       entrypoint:
