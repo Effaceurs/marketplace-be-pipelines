@@ -39,8 +39,9 @@ delete:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
         - terraform destroy -auto-approve 
-        - rm -rf ../${ID}
-        - git rm -r ../${ID} 
+        - cd ../
+        - rm -rf ${ID}
+        - git rm -r ${ID} 
         - git commit --allow-empty -m "DELETEION OF ${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
         - git push -f --set-upstream origin HEAD:customer/${CUSTOMERNAME} -o ci.skip
 
