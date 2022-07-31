@@ -76,6 +76,8 @@ build:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
         - terraform apply -auto-approve 
+    #after_script:
+    #    - mv ./terraform/customers/${CUSTOMERNAME}/${ID} /
     artifacts:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
@@ -92,7 +94,7 @@ push:
       - git config --global user.name "${GITLAB_USER_NAME}"
       - git config --global user.email "${GITLAB_USER_EMAIL}"
     script:
-      - ls -ltr ./
+      - ls -ltr ./terraform/customers/${CUSTOMERNAME}/
       - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
       - git checkout -b customer/${CUSTOMERNAME} || git checkout customer/${CUSTOMERNAME} 
       - git pull --set-upstream origin customer/${CUSTOMERNAME} || echo 'nothing to pull'
