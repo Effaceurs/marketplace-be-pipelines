@@ -25,12 +25,13 @@ preflight:
         - /usr/bin/env 
     stage: preflight
     script:
-        - apk update && apk add gettext
+        - apk update && apk add gettext && apk add moreutils 
         - mkdir -p ./terraform/customers/${CUSTOMERNAME}/${ID}
         - envsubst < ./terraform/templates/${MODULE_NAME}.tf > ./terraform/customers/${CUSTOMERNAME}/${ID}/${MODULE_NAME}.tf
-    artifacts:
-        paths:
-        - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
+       # - envsubst < ./terraform/modules/marketplace/${MODULE_NAME}/main.tf | sponge  ./terraform/modules/marketplace/${MODULE_NAME}/main.tf
+#    artifacts:
+#        paths:
+#        - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
 
 
 delete:
@@ -44,6 +45,7 @@ delete:
       - if: $STATUS == "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
+        - cat ./terraform/modules/marketplace/${MODULE_NAME}/main.tf
         - terraform init 
         - terraform destroy -auto-approve 
 
@@ -60,6 +62,7 @@ build:
     - if: $STATUS != "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
+        - cat ./terraform/modules/marketplace/${MODULE_NAME}/main.tf
         - terraform init 
         - terraform apply -auto-approve 
     artifacts:
