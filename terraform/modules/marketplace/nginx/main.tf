@@ -7,7 +7,8 @@ terraform {
 
   backend "kubernetes" {
     config_path      = "/builds/root/marketplace/terraform/config"
-    secret_suffix =  "${var.id}"
+    secret_suffix = ${var.id}
+    namespace = var.namespace
   }
 }
 
