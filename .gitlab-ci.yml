@@ -77,8 +77,6 @@ build:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
         - terraform apply -auto-approve 
-    #after_script:
-    #    - mv ./terraform/customers/${CUSTOMERNAME}/${ID} /
     artifacts:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
@@ -91,22 +89,23 @@ push:
       name: alpine/git:latest
       entrypoint:
         - /usr/bin/env 
-    before_script:
-      - git config --global user.name "${GITLAB_USER_NAME}"
-      - git config --global user.email "${GITLAB_USER_EMAIL}"
+   #before_script:
+   #  - git config --global user.name "${GITLAB_USER_NAME}"
+   #  - git config --global user.email "${GITLAB_USER_EMAIL}"
     script:
-      - ls -ltr ./terraform/customers/${CUSTOMERNAME}/
-      - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-      - git checkout -b customer/${CUSTOMERNAME} || git checkout customer/${CUSTOMERNAME} 
-      - ls -ltr ./terraform/customers/${CUSTOMERNAME}/
-      - git pull --set-upstream origin customer/${CUSTOMERNAME} || echo 'nothing to pull'
-      - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
-      - git rm ./.gitlab-ci.yml || echo 'nothing to delete'
-      - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
-      - git push -f --set-upstream origin HEAD:customer/${CUSTOMERNAME} -o ci.skip
+   #   - ls -ltr ./terraform/customers/${CUSTOMERNAME}/
+   #   - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
+   #   - git checkout -b customer/${CUSTOMERNAME} || git checkout customer/${CUSTOMERNAME} 
+   #   - ls -ltr ./terraform/customers/${CUSTOMERNAME}/
+   #   - git pull --set-upstream origin customer/${CUSTOMERNAME} || echo 'nothing to pull'
+   #   - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
+   #   - git rm ./.gitlab-ci.yml || echo 'nothing to delete'
+   #   - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
+   #   - git push -f --set-upstream origin HEAD:customer/${CUSTOMERNAME} -o ci.skip
+       - mv ./terraform/customers/${CUSTOMERNAME}/${ID}/output.txt ./output.txt 
     retry: 2
-    after_script:
-    - mv ./terraform/customers/${CUSTOMERNAME}/${ID}/output.txt ./output.txt 
+    #after_script:
+    #- mv ./terraform/customers/${CUSTOMERNAME}/${ID}/output.txt ./output.txt 
     artifacts:
       paths:
       - ./output.txt 
