@@ -29,9 +29,9 @@ preflight:
         - mkdir -p ./terraform/customers/${CUSTOMERNAME}/${ID}
         - envsubst < ./terraform/templates/${MODULE_NAME}.tf > ./terraform/customers/${CUSTOMERNAME}/${ID}/${MODULE_NAME}.tf
        # - envsubst < ./terraform/modules/marketplace/${MODULE_NAME}/main.tf | sponge  ./terraform/modules/marketplace/${MODULE_NAME}/main.tf
-#    artifacts:
-#        paths:
-#        - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
+    artifacts:
+        paths:
+        - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
 
 
 delete:
