@@ -16,7 +16,8 @@ checkProviderKubernetes:
       - mkdir ~/.kube/
       - echo ${KUBE_CONFIG} | base64 -d > ~/.kube/config
     script:
-        kubectl create namespace ${NAMESPACE} && kubectl label namespace ${NAMESPACE} istio-injection=enabled
+        kubectl create namespace ${NAMESPACE}
+        # temp disable because of resource issues && kubectl label namespace ${NAMESPACE} istio-injection=enabled
 
 preflight:
     image: 
