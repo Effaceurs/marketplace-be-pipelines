@@ -5,7 +5,7 @@ stages:
     - push
     - delete
 
-checkProviderk8s:
+checkProviderKubernetes:
     image: 
         name: alpine/k8s:1.22.10
     stage: checkProviderKubernetes
@@ -18,39 +18,7 @@ checkProviderk8s:
     script:
         kubectl create namespace ${NAMESPACE} && kubectl label namespace ${NAMESPACE} istio-injection=enabled
 
-delete:
-    image: 
-      name: hashicorp/terraform 
-      entrypoint:
-      - /usr/bin/env
-      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-    stage: delete
-    variables:
-      GIT_STRATEGY: clone
-    rules: 
-      - if: $STATUS == "deleting"
-    before_script:
-      - git config --global user.name "${GITLAB_USER_NAME}"
-      - git config --global user.email "${GITLAB_USER_EMAIL}"
-    script:
-        - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-        - git fetch
-        - git checkout customer/${CUSTOMERNAME}
-        - ls -ltr ./ 
-        - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
-        - terraform init 
-        - terraform destroy -auto-approve 
-        - cd ../
-        - rm -rf ${ID}
-        - git rm -r ${ID} 
-        - git commit --allow-empty -m "DELETEION OF ${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
-        - git push -f --set-upstream origin HEAD:customer/${CUSTOMERNAME} -o ci.skip
-
-
-
 preflight:
-    rules: 
-        - if: $STATUS != "deleting"
     image: 
       name: alpine:3.14
       entrypoint:
@@ -64,12 +32,29 @@ preflight:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
 
-build:
+
+delete:
     image: 
-      name: hashicorp/terraform 
+      name: hashicorp/terraform:1.2.6
       entrypoint:
       - /usr/bin/env
-      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ #     - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    stage: delete
+    rules: 
+      - if: $STATUS == "deleting"
+    script:
+        - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
+        - terraform init 
+        - terraform destroy -auto-approve 
+
+
+
+build:
+    image: 
+      name: hashicorp/terraform:1.2.6
+      entrypoint:
+      - /usr/bin/env
+#      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     stage: build
     rules: 
     - if: $STATUS != "deleting"
@@ -86,26 +71,11 @@ push:
     rules: 
     - if: $STATUS != "deleting"
     image:
-      name: alpine/git:latest
+      name: alpine:3.15.5
       entrypoint:
         - /usr/bin/env 
-   #before_script:
-   #  - git config --global user.name "${GITLAB_USER_NAME}"
-   #  - git config --global user.email "${GITLAB_USER_EMAIL}"
     script:
-   #   - ls -ltr ./terraform/customers/${CUSTOMERNAME}/
-   #   - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
-   #   - git checkout -b customer/${CUSTOMERNAME} || git checkout customer/${CUSTOMERNAME} 
-   #   - ls -ltr ./terraform/customers/${CUSTOMERNAME}/
-   #   - git pull --set-upstream origin customer/${CUSTOMERNAME} || echo 'nothing to pull'
-   #   - git add ./terraform/customers/${CUSTOMERNAME}/${ID}/*.tf*
-   #   - git rm ./.gitlab-ci.yml || echo 'nothing to delete'
-   #   - git commit --allow-empty -m "${CUSTOMERNAME}-${NAMESPACE}-${MODULE_NAME}-${NAME}-${ID}-${CI_PIPELINE_ID}"
-   #   - git push -f --set-upstream origin HEAD:customer/${CUSTOMERNAME} -o ci.skip
        - mv ./terraform/customers/${CUSTOMERNAME}/${ID}/output.txt ./output.txt 
-    retry: 2
-    #after_script:
-    #- mv ./terraform/customers/${CUSTOMERNAME}/${ID}/output.txt ./output.txt 
     artifacts:
       paths:
       - ./output.txt 
