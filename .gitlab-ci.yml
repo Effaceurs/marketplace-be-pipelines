@@ -35,7 +35,8 @@ delete:
     script:
         - git remote set-url origin http://gitlab-ci-token:${ACCESS_TOKEN}@192.168.110.134/root/marketplace.git
         - git fetch
-        - git checkout customer/${CUSTOMERNAME} 
+        - git checkout customer/${CUSTOMERNAME}
+        - ls -ltr ./ 
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
         - terraform destroy -auto-approve 
