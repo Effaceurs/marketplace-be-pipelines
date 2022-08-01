@@ -32,7 +32,6 @@ preflight:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
 
-
 delete:
     image: 
       name: hashicorp/terraform:1.2.6
@@ -45,8 +44,6 @@ delete:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
         - terraform destroy -auto-approve 
-
-
 
 build:
     image: 
