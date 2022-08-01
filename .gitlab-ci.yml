@@ -25,10 +25,9 @@ preflight:
         - /usr/bin/env 
     stage: preflight
     script:
-        - apk update && apk add gettext && apk add moreutils 
+        - apk update && apk add gettext
         - mkdir -p ./terraform/customers/${CUSTOMERNAME}/${ID}
         - envsubst < ./terraform/templates/${MODULE_NAME}.tf > ./terraform/customers/${CUSTOMERNAME}/${ID}/${MODULE_NAME}.tf
-       # - envsubst < ./terraform/modules/marketplace/${MODULE_NAME}/main.tf | sponge  ./terraform/modules/marketplace/${MODULE_NAME}/main.tf
     artifacts:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
@@ -39,13 +38,11 @@ delete:
       name: hashicorp/terraform:1.2.6
       entrypoint:
       - /usr/bin/env
- #     - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     stage: delete
     rules: 
       - if: $STATUS == "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
-        - cat ./terraform/modules/marketplace/${MODULE_NAME}/main.tf
         - terraform init 
         - terraform destroy -auto-approve 
 
@@ -56,13 +53,11 @@ build:
       name: hashicorp/terraform:1.2.6
       entrypoint:
       - /usr/bin/env
-#      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     stage: build
     rules: 
     - if: $STATUS != "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
-        - cat ./terraform/modules/marketplace/${MODULE_NAME}/main.tf
         - terraform init 
         - terraform apply -auto-approve 
     artifacts:
