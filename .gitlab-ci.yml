@@ -1,6 +1,7 @@
 stages:
     - checkProviderKubernetes
-    - unittest
+    - preflight
+    - unit_test
     - build
     - push
     - delete
@@ -18,12 +19,12 @@ checkProviderKubernetes:
     script:
         kubectl create namespace ${NAMESPACE}
 
-unittest:
+preflight:
     image: 
       name: alpine:3.14
       entrypoint:
         - /usr/bin/env 
-    stage: unittest
+    stage: preflight
     script:
         - apk update && apk add gettext
         - mkdir -p ./terraform/customers/${CUSTOMERNAME}/${ID}
@@ -35,6 +36,25 @@ unittest:
     artifacts:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
+
+
+unit_test:
+    image: 
+      name: hashicorp/terraform:1.2.6
+      entrypoint:
+      - /usr/bin/env
+    stage: unit_test
+    rules: 
+    - if: $STATUS != "deleting"
+    script:
+        - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
+        - terraform init 
+        - terraform fmt -check
+        - terraform validate
+    artifacts:
+        paths:
+        - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
+
 
 delete:
     image: 
