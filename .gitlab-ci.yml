@@ -40,8 +40,6 @@ unit_test:
       entrypoint:
       - /usr/bin/env
     stage: unit_test
-    rules: 
-    - if: $STATUS != "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
@@ -61,7 +59,6 @@ delete:
       - if: $STATUS == "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
-        #- terraform init 
         - terraform destroy -auto-approve 
 
 build:
@@ -74,12 +71,11 @@ build:
     - if: $STATUS != "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
-        #- terraform init 
         - terraform apply -auto-approve 
     artifacts:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
-
+ 
 push:
     stage: push
     rules: 
