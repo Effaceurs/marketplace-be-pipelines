@@ -45,7 +45,6 @@ unit_test:
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
         - terraform init 
-        - terraform fmt -check
         - terraform validate
     artifacts:
         paths:
