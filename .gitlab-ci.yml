@@ -1,6 +1,6 @@
 stages:
     - checkProviderKubernetes
-    - preflight
+    - unittest
     - build
     - push
     - delete
@@ -18,16 +18,20 @@ checkProviderKubernetes:
     script:
         kubectl create namespace ${NAMESPACE}
 
-preflight:
+unittest:
     image: 
       name: alpine:3.14
       entrypoint:
         - /usr/bin/env 
-    stage: preflight
+    stage: unittest
     script:
         - apk update && apk add gettext
         - mkdir -p ./terraform/customers/${CUSTOMERNAME}/${ID}
         - envsubst < ./terraform/templates/${MODULE_NAME}.tf > ./terraform/customers/${CUSTOMERNAME}/${ID}/${MODULE_NAME}.tf
+        - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
+        - terraform init 
+        - terraform fmt -check
+        - terraform validate
     artifacts:
         paths:
         - ./terraform/customers/${CUSTOMERNAME}/${ID}/*
@@ -42,7 +46,7 @@ delete:
       - if: $STATUS == "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
-        - terraform init 
+        #- terraform init 
         - terraform destroy -auto-approve 
 
 build:
@@ -55,7 +59,7 @@ build:
     - if: $STATUS != "deleting"
     script:
         - cd ./terraform/customers/${CUSTOMERNAME}/${ID}/
-        - terraform init 
+        #- terraform init 
         - terraform apply -auto-approve 
     artifacts:
         paths:
